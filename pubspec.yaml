@@ -1,0 +1,11 @@
+name: external_consumer_demo
+publish_to: "none"
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  local_utils:
+    path: third_party/local_utils
+  ffi: ^2.2.0
