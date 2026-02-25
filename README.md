@@ -1,36 +1,13 @@
 # external_consumer_demo
 
-This folder simulates a third-party project consuming `dartvm_embed_lib` as a CMake package.
+This folder simulates a third-party project consuming `dartvm_embed_lib` as a CMake package. Serve as an example for use this package
 
-It intentionally uses a local path package in `pubspec.yaml` so `dart pub get` works without internet.
+## about dart
 
-## Install provider package
+you can use this command to use dart tools compile by `dartvm_embed_lib` library
 
-```bash
-cd ../dartvm_embed_lib
-cmake --preset jit
-cmake --build --preset jit-build
-cmake --install build/jit --prefix /tmp/dartvm_embed_install
-```
-
-## Build consumer
+> note: before this, you need configure cmake first for download library
 
 ```bash
-cd ../external_consumer_demo
-
-# jit
-cmake --preset jit
-cmake --build --preset jit-build
-
-# aot
-cmake --preset aot
-cmake --build --preset aot-build
-```
-
-## Run
-
-```bash
-./build/jit/external_consumer_demo
-
-./build/aot/external_consumer_demo
+export PATH="$PWD/build/_deps/dartvm_sdk-src/share/dartvm_embed_lib/dart-sdk/out/ReleaseX64/dart-sdk/bin:$PATH"
 ```

@@ -4,10 +4,13 @@ include(FetchContent)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(FETCHCONTENT_QUIET OFF)
 
 FetchContent_Declare(
   dartvm_sdk
-  URL "/tmp/dartvm_embed_install.tar.gz"
+  # URL "/home/feipiao/Downloads/dartvm_embed_lib-linux"
+  URL "https://github.com/feipiao594/dartvm_embed_lib/releases/download/dev-v0.0.1(vibe)/dartvm_embed_lib-dev-v0.0.1.vibe.-linux-x64.tar.gz"
+  DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
 FetchContent_MakeAvailable(dartvm_sdk)
