@@ -1,13 +1,48 @@
-# external_consumer_demo
+# App Starter
 
-This folder simulates a third-party project consuming `dartvm_embed_lib` as a CMake package. Serve as an example for use this package
+This folder is the in-tree starter project.
 
-## about dart
+What you edit:
 
-you can use this command to use dart tools compile by `dartvm_embed_lib` library
+- `lib/main.dart`: Dart application code
+- `src/main.cpp`: native host / FFI surface
 
-> note: before this, you need configure cmake first for download library
+What the starter hides in `internal/`:
+
+- JIT vs AOT artifact generation
+- choosing the matching `dartvm_embed_lib_*` target
+- choosing source-vs-kernel JIT startup from the flavor itself
+- wiring the host to the generated Dart artifact with explicit absolute paths
+
+Configure from the repository root:
 
 ```bash
-export PATH="$PWD/build/_deps/dartvm_sdk-src/share/dartvm_embed_lib/dart-sdk/out/ReleaseX64/dart-sdk/bin:$PATH"
+cmake --install build --prefix lib_install
+cmake -S example -B example/build -G Ninja \
+  -DAPP_RUNTIME_FLAVOR=jit \
+cmake --build example/build
+cd example/build
+./app
+```
+
+For JIT hot reload:
+
+```bash
+cmake --install build --prefix lib_install
+cmake -S example -B example/build -G Ninja \
+  -DAPP_RUNTIME_FLAVOR=jit_source
+cmake --build example/build
+cd example/build
+./app
+```
+
+For AOT:
+
+```bash
+cmake --install build --prefix lib_install
+cmake -S example -B example/build -G Ninja \
+  -DAPP_RUNTIME_FLAVOR=aot
+cmake --build example/build
+cd example/build
+./app
 ```

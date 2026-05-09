@@ -1,15 +1,16 @@
 #include <cstdint>
+#include <cstdlib>
 #include <iostream>
-#include <dartvm_embed_lib.h>
+
+#include "app_runtime.h"
 
 extern "C" void SimplePrintInt(int64_t value) {
-  std::cout << "[external-ffi] value from Dart: " << value << std::endl;
+  std::cout << "[ffi] value from Dart: " << value << std::endl;
 }
 
 int main() {
   char* error = nullptr;
-  Dart_Isolate isolate = DartVmEmbed_CreateIsolateFromProgramFile(
-      "program.bin", "hello.dart", nullptr, nullptr, &error);
+  Dart_Isolate isolate = CreateApplicationIsolate(&error);
   if (isolate == nullptr) {
     std::cerr << "Create isolate failed: " << (error ? error : "unknown")
               << std::endl;
