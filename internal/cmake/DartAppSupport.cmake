@@ -138,7 +138,7 @@ endfunction()
 
 function(dartvm_app_get_program_artifact_path out_var)
   set(${out_var}
-    "${CMAKE_CURRENT_BINARY_DIR}/artifacts/${APP_RUNTIME_FLAVOR}/program.bin"
+    "${CMAKE_CURRENT_BINARY_DIR}/program.bin"
     PARENT_SCOPE
   )
 endfunction()
@@ -231,14 +231,27 @@ function(dartvm_app_configure_target target_name)
   target_include_directories("${target_name}" PRIVATE
     "${_DARTVM_APP_TEMPLATE_DIR}/internal/native"
   )
+  set(_app_program_path_define "${APP_PROGRAM_ARTIFACT}")
+  if(APP_RUNTIME_FLAVOR STREQUAL "aot")
+    set(_app_program_path_define "program.bin")
+  endif()
   target_compile_definitions("${target_name}" PRIVATE
-    DARTVM_APP_PROGRAM_PATH="${APP_PROGRAM_ARTIFACT}"
+    DARTVM_APP_PROGRAM_PATH="${_app_program_path_define}"
     DARTVM_APP_SOURCE_PATH="${APP_DART_ENTRY_FILE}"
     DARTVM_APP_SCRIPT_URI="${APP_DART_SCRIPT_URI}"
   )
 
   if(UNIX AND NOT APPLE)
     target_link_options("${target_name}" PRIVATE "-Wl,--export-dynamic")
+  endif()
+
+  if(NOT APP_RUNTIME_FLAVOR STREQUAL "jit_source")
+    add_custom_command(TARGET "${target_name}" POST_BUILD
+      COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+              "${APP_PROGRAM_ARTIFACT}"
+              "$<TARGET_FILE_DIR:${target_name}>/program.bin"
+      COMMENT "Copying Dart program artifact next to ${target_name}"
+    )
   endif()
 
   if(EXISTS "${DARTSDK_VM_PLATFORM_DILL}")
