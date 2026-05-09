@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 project(DARTVM_EMBED_APP_TEMPLATE)
 
-set(APP_RUNTIME_FLAVOR "aot")
+set(APP_RUNTIME_FLAVOR "jit_source")
 set(APP_EMBED_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../lib_install")
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/internal/cmake/DartAppSupport.cmake")

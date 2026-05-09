@@ -10,11 +10,11 @@ endfunction()
 macro(_dartvm_app_prepare_sdk_paths)
   set(DARTSDK_BUILD_DIR "ReleaseX64")
   set(APP_EMBED_SDK_DIR "${APP_EMBED_INSTALL_DIR}/share/dartvm_embed_lib/sdk/${DARTSDK_BUILD_DIR}")
-  set(DARTSDK_DART_BIN "${APP_EMBED_INSTALL_DIR}/share/dartvm_embed_lib/dart-sdk/out/ReleaseX64/dart-sdk/bin/dart")
+  set(DARTSDK_DART_BIN "${APP_EMBED_SDK_DIR}/bin/dart")
   set(DARTSDK_GEN_SNAPSHOT_BIN "${APP_EMBED_SDK_DIR}/gen_snapshot")
-  set(DARTSDK_DARTAOTRUNTIME_BIN "${APP_EMBED_INSTALL_DIR}/share/dartvm_embed_lib/dart-sdk/out/ReleaseX64/dart-sdk/bin/dartaotruntime")
-  set(DARTSDK_GEN_KERNEL_SNAPSHOT "${APP_EMBED_SDK_DIR}/gen_kernel_aot.dart.snapshot")
-  set(DARTSDK_VM_PLATFORM_DILL "${APP_EMBED_SDK_DIR}/vm_platform_strong.dill")
+  set(DARTSDK_DARTAOTRUNTIME_BIN "${APP_EMBED_SDK_DIR}/bin/dartaotruntime")
+  set(DARTSDK_GEN_KERNEL_SNAPSHOT "${APP_EMBED_SDK_DIR}/bin/snapshots/gen_kernel_aot.dart.snapshot")
+  set(DARTSDK_VM_PLATFORM_DILL "${APP_EMBED_SDK_DIR}/lib/_internal/vm_platform_strong.dill")
 endmacro()
 
 function(_dartvm_app_get_install_libdir out_var)
@@ -194,7 +194,7 @@ function(dartvm_app_add_program_artifact_target target_name)
       COMMAND "${CMAKE_COMMAND}" -E make_directory "${_app_program_dir}"
       COMMAND "${DARTSDK_GEN_SNAPSHOT_BIN}"
               --snapshot_kind=app-aot-elf
-              --elf="${_app_program}"
+              --elf=${_app_program}
               "${_app_aot_kernel}"
       WORKING_DIRECTORY "${APP_DART_PUBSPEC_DIR}"
       DEPENDS "${_app_aot_kernel}"
